@@ -1,0 +1,17 @@
+.list {
+  list-style: none;
+}
+
+.item {
+  box-sizing: border-box;
+  display: flex;
+  margin-bottom: 5px;
+  background-color: rgb(190, 168, 168);
+}
+.description {
+  margin-left: 15px;
+}
+.name {
+  font-size: large;
+  font-weight: bold;
+}
