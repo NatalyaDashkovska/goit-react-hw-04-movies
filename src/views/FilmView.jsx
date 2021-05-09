@@ -1,30 +1,53 @@
-import React, { Component, Link } from 'react';
+import React, { Component } from 'react';
 import routes from '../routes';
 import { NavLink, Route } from 'react-router-dom';
 import ApiService from '../services/api-service';
-import noImage from '../images/no-img.jpg';
+import noImage from '../images/no-image.png';
 import SearchCast from '../components/SearchCast';
 import SearchReviews from '../components/SearchReviews';
+import PropTypes from 'prop-types';
 class FilmView extends Component {
+  static propTypes = {
+    match: PropTypes.object,
+    history: PropTypes.object,
+    location: PropTypes.object,
+  };
   state = {
-    film: '',
     name: '',
     popularity: '',
     overview: '',
     title: '',
-    isLoading: '',
+
     poster_path: '',
     type: '',
     genres: [],
+    id: '',
   };
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
+    const { location } = this.props;
+    if (location.state === undefined) {
+      this.Fetch('movie');
+    } else {
+      this.Fetch(location.state.type);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const { location } = this.props;
+
+    // console.log(prevProps);
+    // console.log(prevState);
+    if (prevState.type === '') {
+      if (location.state === undefined) {
+        this.Fetch('movie');
+      } else {
+        this.Fetch(location.state.type);
+      }
+    }
+  }
+
+  Fetch = type => {
     const { movieId } = this.props.match.params;
-    // console.log(this.props.location.state.type);
-    const { type } = this.props.location.state;
-    // console.log(type);
-    // const type = this.props.location.state.type || `movie`;
-    // this.setState({ type: type });
 
     type !== `tv`
       ? ApiService.SearchMovieById(movieId)
@@ -34,7 +57,7 @@ class FilmView extends Component {
           })
           .catch(error => this.setState(error))
           .finally(() => {
-            this.setState({ type: '' });
+            this.setState({ type: type });
           })
       : ApiService.SearchTVById(movieId)
           .then(movieDetails => {
@@ -43,13 +66,16 @@ class FilmView extends Component {
           })
           .catch(error => this.setState(error))
           .finally(() => {
-            this.setState({ type: '' });
+            this.setState({ type: type });
           });
-  }
-
+  };
   handleGoBack = () => {
     const { location, history } = this.props;
+    // console.log(location);
+    // console.log(history);
     history.push(location?.state?.from || routes.home);
+    history.push({ search: location.state.search });
+    // console.log(this.props);
   };
   render() {
     const {
@@ -59,26 +85,21 @@ class FilmView extends Component {
       title,
       poster_path,
       genres,
+      type,
     } = this.state;
-    const { film } = this.state;
-    // console.log(this.state);
-    const { url, path } = this.props.match;
-    // console.log(url);
-    // console.log(path);
+
     const baseURL = 'https://image.tmdb.org/t/p/w300';
     const imgURL = baseURL + poster_path;
-    // const { genres } = film;
-    // const type = this.props.location.state.type || this.state.type;
-    const { aaa } = this.props.match.params.movieId;
+    const movieId = this.props.match.params.movieId;
     return (
       <div>
         <button type="button" onClick={this.handleGoBack}>
           Back
         </button>
 
-        {/* <div>
-          <img src={poster_path && imgURL} alt={title} />
-        </div> */}
+        <div>
+          <img src={(poster_path && imgURL) || noImage} alt={title} />
+        </div>
         <div>
           <h2>
             {name}
@@ -96,7 +117,6 @@ class FilmView extends Component {
               </ul>
             </>
           )}
-          <ul></ul>
         </div>
         <div>
           <h2>Additional information</h2>
@@ -105,10 +125,10 @@ class FilmView extends Component {
             <li>
               <NavLink
                 to={{
-                  pathname: `/movies/${this.props.match.params.movieId}/cast`,
+                  pathname: `/movies/${movieId}/cast`,
                   state: {
-                    id: this.props.match.params.movieId,
-                    type: this.state.type,
+                    id: movieId,
+                    type: type,
                   },
                 }}
               >
@@ -118,10 +138,10 @@ class FilmView extends Component {
             <li>
               <NavLink
                 to={{
-                  pathname: `/movies/${this.props.match.params.movieId}/reviews`,
+                  pathname: `/movies/${movieId}/reviews`,
                   state: {
-                    id: this.props.match.params.movieId,
-                    type: this.state.type,
+                    id: movieId,
+                    type: type,
                   },
                 }}
               >
@@ -129,10 +149,10 @@ class FilmView extends Component {
               </NavLink>
             </li>
           </ul>
-          {this.state.type && (
+          {type && (
             <Route path={`${routes.movieCast}`} component={SearchCast} />
           )}
-          {this.state.type && (
+          {type && (
             <Route path={`${routes.movieReviews}`} component={SearchReviews} />
           )}
         </div>

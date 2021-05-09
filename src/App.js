@@ -23,7 +23,7 @@ const App = () => (
   <>
     <AppBar />
 
-    <Suspense fallback={<h1>Загружаем...</h1>}>
+    <Suspense fallback={<h1>Loading...</h1>}>
       <Switch>
         <Route exact path={routes.home} component={HomeView} />
 

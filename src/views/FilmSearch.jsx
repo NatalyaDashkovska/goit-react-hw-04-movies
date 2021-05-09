@@ -1,44 +1,26 @@
 import React, { Component } from 'react';
 import SearchBar from '../components/SearchBar';
 import SearchByName from '../components/SearchByName';
+import PropTypes from 'prop-types';
 class FilmSearch extends Component {
+  static propTypes = {
+    match: PropTypes.object,
+    history: PropTypes.object,
+    location: PropTypes.object,
+  };
   state = {
     searchQuery: '',
   };
   onChangeSearch = search => {
     this.setState({ searchQuery: search });
     // console.log(search);
-    // console.log(this.props);
   };
   componentDidMount() {
-    const aaa = this.props.history.location.search;
-    console.log(aaa.slice(1));
-    console.log(1);
-    if (aaa) {
-      this.setState({ searchQuery: aaa });
+    const query = this.props.history.location.search;
+
+    if (query) {
+      this.setState({ searchQuery: query });
     }
-    // const { history, location } = this.props;
-    // history.push({
-    //   pathname: location.pathname,
-    //   search: `search=${search}`,
-    // });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    // const aaa = this.props.history.location.search;
-    // if (aaa) {
-    //   this.setState({ searchQuery: aaa });
-    // }
-    // console.log(this.state.searchQuery);
-    // console.log(this.props);
-    // if (!this.props.history.location.search) {
-    //   // console.log(this.state);
-    //   // console.log(this.props.history.location.search);
-    //   const { history, location } = this.props;
-    //   history.push({
-    //     pathname: location.pathname,
-    //     search: this.state.searchQuery,
-    //   });
-    // }
   }
 
   render() {
@@ -47,11 +29,9 @@ class FilmSearch extends Component {
     // console.log(this.props);
     return (
       <>
-        <h1>kino</h1>
         <SearchBar onSubmit={this.onChangeSearch} />
 
         {searchQuery && <SearchByName search={searchQuery} />}
-        {/* <SearchByName search={searchQuery} /> */}
       </>
     );
   }

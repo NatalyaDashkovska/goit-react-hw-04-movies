@@ -3,7 +3,7 @@ import styles from './FilmList.module.css';
 import { Link, withRouter } from 'react-router-dom';
 
 const FilmList = ({ movies, location, search }) => {
-  console.log(location);
+  // console.log(location);
 
   return (
     <ul className={styles.list}>
