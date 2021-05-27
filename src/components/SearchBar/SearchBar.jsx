@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import styles from './SearchBar.module.css';
+
 import PropTypes from 'prop-types';
 class SearchBar extends Component {
   state = { search: '' };
   formSubmit = e => {
     e.preventDefault();
     // console.log(this.props);
+
     this.props.onSubmit(this.state.search);
 
     this.reset();

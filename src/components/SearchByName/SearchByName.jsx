@@ -8,6 +8,16 @@ class SearchByName extends Component {
     movies: [],
     name: '',
   };
+
+  async searchByName(query) {
+    try {
+      const res = await ApiService.SearchByName(query);
+
+      this.setState({ movies: res });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   componentDidMount() {
     // console.log(this.props);
 
@@ -15,19 +25,18 @@ class SearchByName extends Component {
 
     this.setState({ name: query });
 
-    ApiService.SearchByName(query).then(movies => {
-      // console.log(movies);
-      this.setState({ movies: movies });
-    });
+    // ApiService.SearchByName(query).then(movies => {
+    //   this.setState({ movies: movies });
+    // });
+
+    this.searchByName(query);
   }
   componentDidUpdate(prevProps, prevState) {
     const query = this.props.search;
 
     if (query !== prevState.name) {
       this.setState({ name: query });
-      ApiService.SearchByName(query).then(movies => {
-        this.setState({ movies: movies });
-      });
+      this.searchByName(query);
     }
   }
   render() {

@@ -9,16 +9,21 @@ class SearchReviews extends Component {
     location: PropTypes.object,
   };
   state = { reviews: [] };
+
+  async searchReviews(id, type) {
+    try {
+      const data = await ApiService.SearchReviews(id, type);
+
+      this.setState({ reviews: data });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   componentDidMount() {
     const { state } = this.props.location;
     // console.log(this.props);
 
-    ApiService.SearchReviews(state.id, state.type)
-      .then(data => {
-        // console.log(data);
-        this.setState({ reviews: data });
-      })
-      .catch(error => this.setState(error));
+    this.searchReviews(state.id, state.type);
   }
   render() {
     const { reviews } = this.state;

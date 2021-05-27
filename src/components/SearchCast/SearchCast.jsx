@@ -9,16 +9,19 @@ class SearchCast extends Component {
     location: PropTypes.object,
   };
   state = { cast: [] };
-  componentDidMount() {
-    // console.log(this.props);
-    const { state } = this.props.location;
+  async SearchCast(id, type) {
+    try {
+      const data = await ApiService.SearchCast(id, type);
 
-    ApiService.SearchCast(state.id, state.type)
-      .then(data => {
-        // console.log(data);
-        this.setState({ cast: data });
-      })
-      .catch(error => this.setState(error));
+      this.setState({ cast: data });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  componentDidMount() {
+    // console.log(this.props.location);
+    const { state } = this.props.location;
+    this.SearchCast(state.id, state.type);
   }
   render() {
     const { cast } = this.state;

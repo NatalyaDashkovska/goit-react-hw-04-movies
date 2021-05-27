@@ -7,7 +7,14 @@ class HomeView extends Component {
     movies: [],
   };
   async componentDidMount() {
-    ApiService.SearchTrends().then(res => this.setState({ movies: res }));
+    // ApiService.SearchTrends().then(res => this.setState({ movies: res }));
+    try {
+      const res = await ApiService.SearchTrends();
+
+      this.setState({ movies: res });
+    } catch (error) {
+      console.log(error);
+    }
   }
   render() {
     return (
@@ -20,4 +27,3 @@ class HomeView extends Component {
 }
 
 export default HomeView;
-

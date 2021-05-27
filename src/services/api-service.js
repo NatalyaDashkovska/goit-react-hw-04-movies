@@ -1,16 +1,16 @@
 import axios from 'axios';
 const key = `dc8ed4d6ac6c5b8332ba703755398190`;
 
-const SearchMovieById = async movieId => {
-  return await axios
+const SearchMovieById = movieId => {
+  return axios
     .get(
       `https://api.themoviedb.org/3/movie/${movieId}?api_key=${key}&language=en-US`,
     )
     .then(res => res.data);
 };
 
-const SearchTVById = async movieId => {
-  return await axios
+const SearchTVById = movieId => {
+  return axios
     .get(
       `https://api.themoviedb.org/3/tv/${movieId}?api_key=${key}&language=en-US`,
     )

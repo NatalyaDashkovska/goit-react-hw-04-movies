@@ -27,9 +27,9 @@ class FilmView extends Component {
     // console.log(this.props);
     const { location } = this.props;
     if (location.state === undefined) {
-      this.Fetch('movie');
+      this.fetchMovie('movie');
     } else {
-      this.Fetch(location.state.type);
+      this.fetchMovie(location.state.type);
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -39,14 +39,14 @@ class FilmView extends Component {
     // console.log(prevState);
     if (prevState.type === '') {
       if (location.state === undefined) {
-        this.Fetch('movie');
+        this.fetchMovie('movie');
       } else {
-        this.Fetch(location.state.type);
+        this.fetchMovie(location.state.type);
       }
     }
   }
 
-  Fetch = type => {
+  fetchMovie = type => {
     const { movieId } = this.props.match.params;
 
     type !== `tv`
@@ -73,9 +73,9 @@ class FilmView extends Component {
     const { location, history } = this.props;
     // console.log(location);
     // console.log(history);
-    history.push(location?.state?.from || routes.home);
+    history.push(location.state?.from || routes.home);
     history.push({ search: location.state.search });
-    // console.log(this.props);
+    // console.log(location.state?.from);
   };
   render() {
     const {
@@ -91,6 +91,7 @@ class FilmView extends Component {
     const baseURL = 'https://image.tmdb.org/t/p/w300';
     const imgURL = baseURL + poster_path;
     const movieId = this.props.match.params.movieId;
+    // console.log(this.props);
     return (
       <div>
         <button type="button" onClick={this.handleGoBack}>
@@ -129,6 +130,8 @@ class FilmView extends Component {
                   state: {
                     id: movieId,
                     type: type,
+                    from: this.props.location?.state?.from,
+                    search: this.props.location.state.search,
                   },
                 }}
               >
@@ -142,6 +145,8 @@ class FilmView extends Component {
                   state: {
                     id: movieId,
                     type: type,
+                    from: this.props.location?.state?.from,
+                    search: this.props.location.state.search,
                   },
                 }}
               >

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SearchBar from '../components/SearchBar';
 import SearchByName from '../components/SearchByName';
 import PropTypes from 'prop-types';
+
 class FilmSearch extends Component {
   static propTypes = {
     match: PropTypes.object,
@@ -14,6 +15,16 @@ class FilmSearch extends Component {
   onChangeSearch = search => {
     this.setState({ searchQuery: search });
     // console.log(search);
+    // console.log(this.props.history);
+
+    const onCategoryChange = search => {
+      this.props.history.push({
+        pathname: this.props.location.pathname,
+        search: `query=${search}`,
+      });
+    };
+
+    onCategoryChange(search);
   };
   componentDidMount() {
     const query = this.props.history.location.search;
